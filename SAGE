@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>S.A.G.E</title>
+  <style>
+    body { font-family: Arial; margin: 0; background: #f4f6f8; }
+    .nav {
+      display: flex; justify-content: space-around;
+      background: #1f2937; color: white; padding: 10px;
+    }
+    .nav button {
+      background: none; border: none; color: white;
+      font-size: 16px; cursor: pointer;
+    }
+    .page { display: none; padding: 30px; text-align: center; }
+    .active { display: block; }
+
+    .notify p { background: #fff; padding: 10px; margin: 8px; border-radius: 6px; }
+
+    .gauges { display: flex; justify-content: space-around; margin-top: 30px; }
+    .gauge {
+      width: 180px; height: 90px;
+      border-top-left-radius: 180px;
+      border-top-right-radius: 180px;
+      background: #ddd;
+      position: relative;
+    }
+    .gauge::after {
+      content: ""; width: 140px; height: 70px;
+      background: #f4f6f8;
+      border-top-left-radius: 140px;
+      border-top-right-radius: 140px;
+      position: absolute; bottom: 0; left: 20px;
+    }
+    .label { margin-top: 10px; }
+    .highlight { color: green; font-weight: bold; }
+
+    video { width: 90%; border-radius: 10px; }
+  </style>
+</head>
+
+<body>
+
+<div class="nav">
+  <button onclick="showPage('home')">Home</button>
+  <button onclick="showPage('notify')">Notification</button>
+  <button onclick="showPage('monitor')">Monitoring</button>
+  <button onclick="showPage('map')">Mapping</button>
+</div>
+
+<div id="home" class="page active">
+  <h1>Welcome to S.A.G.E</h1>
+</div>
+
+<div id="notify" class="page notify" onclick="addNote()">
+</div>
+
+<div id="monitor" class="page">
+  <div class="gauges">
+    <div>
+      <div class="gauge"></div>
+      <div class="label">Moisture</div>
+      <p class="highlight">High</p>
+      <p>Medium</p>
+      <p>Low</p>
+    </div>
+
+    <div>
+      <div class="gauge"></div>
+      <div class="label">pH (Acid/Base)</div>
+      <p class="highlight">High</p>
+      <p>Medium</p>
+      <p>Low</p>
+    </div>
+  </div>
+</div>
+
+<div id="map" class="page">
+  <button onclick="startCamera()">Start Mapping</button><br><br>
+  <video id="video" autoplay></video>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  let notes = [
+    "The soil is too acidic",
+    "It's time to use pesticides",
+    "It's time to use weedicides"
+  ];
+  let index = 0;
+
+  function addNote() {
+    if (index < notes.length) {
+      let p = document.createElement("p");
+      p.innerText = notes[index++];
+      document.getElementById("notify").appendChild(p);
+    }
+  }
+
+  function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        document.getElementById("video").srcObject = stream;
+      });
+  }
+</script>
+
+</body>
+</html>
